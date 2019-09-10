@@ -158,7 +158,7 @@ function sample(lastName) {
             // count all jacks
             var jacksCount = await repo.FindAsync(p => p.FirstName == "Jack");
 
-            PrintPersonCollection(await repo.ExecuteStoredProcedure<Person[]>("test", "Smth"));
+            PrintPersonCollection(await repo.ExecuteStoredProcedure<Person[]>("test", "Smith"));
 
             Console.ReadKey(true);
 

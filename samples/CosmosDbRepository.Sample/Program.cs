@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CosmosDbRepository.Sample
 {
-    public class Program
+    public static class Program
     {
         private static async Task Main(string[] args)
         {
@@ -45,13 +45,13 @@ namespace CosmosDbRepository.Sample
                         .ExcludeIndexPath("/FirstName/?", "/LastName/?")
                         .StoredProcedure("test",
 @"// SAMPLE STORED PROCEDURE
-function sample() {
+function sample(lastName) {
     var collection = getContext().getCollection();
 
     // Query documents and take 1st item.
     var isAccepted = collection.queryDocuments(
         collection.getSelfLink(),
-        'SELECT * FROM root r',
+        'SELECT * FROM root r WHERE r.last = \'' + lastName + '\'',
     function (err, feed, options) {
         if (err) throw err;
 
@@ -75,16 +75,14 @@ function sample() {
             // create repository for persons and set Person.FullName property as identity field (overriding default Id property name)
             var repo = documentDb.Repository<Person>();
 
-            var sp = repo.StoredProcedure<Person[]>("test");
-
             // output all persons in our database, nothing there yet
             PrintPersonCollection(await repo.FindAsync());
 
             // create a new person
-            Person matt = new Person
+            var matt = new Person
             {
                 FirstName = "Matt",
-                LastName = "TBA",
+                LastName = "Smith",
                 Birthday = new DateTime(1990, 10, 10),
                 PhoneNumbers =
                     new Collection<PhoneNumber>
@@ -107,7 +105,7 @@ function sample() {
             await repo.DeleteDocumentAsync(matt);
 
             // create another person
-            Person jack = new Person
+            var jack = new Person
             {
                 FirstName = "Jack",
                 LastName = "Smith",
@@ -138,7 +136,7 @@ function sample() {
             Console.WriteLine("GetByIdAsync result: " + justMatt);
 
             // ... or by his first name
-            Person firstMatt = await repo.FindFirstOrDefaultAsync(p => p.FirstName.ToLower() == "matt");
+            var firstMatt = await repo.FindFirstOrDefaultAsync(p => p.FirstName.ToLower() == "matt");
             Console.WriteLine("First: " + firstMatt);
 
             // query all the smiths
@@ -160,7 +158,7 @@ function sample() {
             // count all jacks
             var jacksCount = await repo.FindAsync(p => p.FirstName == "Jack");
 
-            PrintPersonCollection(await sp.ExecuteAsync());
+            PrintPersonCollection(await repo.ExecuteStoredProcedure<Person[]>("test", "Smth"));
 
             Console.ReadKey(true);
 

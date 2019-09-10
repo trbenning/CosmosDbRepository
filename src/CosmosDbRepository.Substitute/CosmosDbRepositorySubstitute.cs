@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace CosmosDbRepository.Substitute
 {
     public class CosmosDbRepositorySubstitute<T>
-        : ICosmosDbRepository<T>
+        : ICosmosDbRepository<T>, ICosmosDbRepositorySubstitute
     {
         private readonly List<EntityStorage> _entities = new List<EntityStorage>();
         private readonly List<Func<T, DocumentClientException>> _addExceptionConditions = new List<Func<T, DocumentClientException>>();
@@ -27,6 +27,7 @@ namespace CosmosDbRepository.Substitute
         private readonly List<Func<DocumentClientException>> _selectManyExceptionConditions = new List<Func<DocumentClientException>>();
         private readonly List<Func<T, DocumentClientException>> _upsertExceptionConditions = new List<Func<T, DocumentClientException>>();
         private readonly List<Func<DocumentClientException>> _countExceptionConditions = new List<Func<DocumentClientException>>();
+        private readonly Dictionary<string, object> _storedProcedureResults = new Dictionary<string, object>();
         private static readonly Type _dbExceptionType = typeof(DocumentClientException);
 
         public string Id => throw new NotImplementedException();
@@ -468,89 +469,14 @@ namespace CosmosDbRepository.Substitute
             return Task.FromResult(DeepClone(item.Entity));
         }
 
-        public IStoredProcedure<TResult> StoredProcedure<TResult>(string id)
+        public void SubstituteStoredProcedureResponse(string id, object result)
         {
-            throw new NotImplementedException();
+            _storedProcedureResults[id] = result;
         }
 
-        public IStoredProcedure<TParam, TResult> StoredProcedure<TParam, TResult>(string id)
+        public Task<TResult> ExecuteStoredProcedure<TResult>(string id, params dynamic[] args)
         {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TResult> StoredProcedure<TParam1, TParam2, TResult>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TParam3, TResult> StoredProcedure<TParam1, TParam2, TParam3, TResult>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TParam3, TParam4, TResult> StoredProcedure<TParam1, TParam2, TParam3, TParam4, TResult>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TResult> StoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TResult>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TResult> StoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TResult>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TResult> StoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TResult>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TResult> StoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TResult>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TResult> StoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TResult>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TResult> StoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TResult>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TResult> StoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TResult>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TResult> StoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TResult>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TResult> StoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TResult>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TResult> StoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TResult>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, TResult> StoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, TResult>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, TParam16, TResult> StoredProcedure<TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7, TParam8, TParam9, TParam10, TParam11, TParam12, TParam13, TParam14, TParam15, TParam16, TResult>(string id)
-        {
-            throw new NotImplementedException();
+            return Task.FromResult((TResult)_storedProcedureResults[id]);
         }
 
         internal void GenerateExceptionOnGetWhen(Predicate<DocumentId> predicate,

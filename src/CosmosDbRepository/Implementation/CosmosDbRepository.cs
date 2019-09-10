@@ -417,7 +417,9 @@ namespace CosmosDbRepository.Implementation
         public Task Init() => _collection.Value;
 
         public async Task<TResult> ExecuteStoredProcedure<TResult>(string id, params object[] args)
-            => await _client.ExecuteStoredProcedureAsync<TResult>(new Uri($"{await AltLink}/sprocs/{Uri.EscapeUriString(id)}", UriKind.Relative));
+            => await _client.ExecuteStoredProcedureAsync<TResult>(
+                new Uri($"{await AltLink}/sprocs/{Uri.EscapeUriString(id)}", UriKind.Relative),
+                args);
 
         private async Task<DocumentCollection> GetOrCreateCollectionAsync()
         {
